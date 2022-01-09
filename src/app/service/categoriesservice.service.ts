@@ -10,18 +10,18 @@ export class CategoriesserviceService {
   constructor(private http : HttpClient) { }
 
   getlistCate(){
-    return this.http.get('http://localhost:8080/admin/api/v1/categories');
+    return this.http.get('http://http://13.229.71.124:8080/admin/api/v1/categories');
   }
 
   addnewCate(cate:categories){
-    return this.http.post('http://localhost:8080/admin/api/v1/savecategories', cate);
+    return this.http.post('http://13.229.71.124:8080/admin/api/v1/savecategories', cate);
   }
 
   updateCate(cateupdate:categories){
-    return this.http.put('http://localhost:8080/admin/api/v1/updatecategories', cateupdate);
+    return this.http.put('http://13.229.71.124:8080/admin/api/v1/updatecategories', cateupdate);
   }
 
   deleteCate(id:number){
-    return this.http.delete('http://localhost:8080/admin/api/v1/categories/'+id);
+    return this.http.delete('http://13.229.71.124:8080/admin/api/v1/categories/'+id);
   }
 }

@@ -11,7 +11,7 @@ export class LoginserviceService {
   constructor(private http: HttpClient) { }
 
   login(formlogin:FormData){
-    return this.http.post('http://localhost:8080/api/v1/login',formlogin);
+    return this.http.post('http://13.229.71.124:8080/api/v1/login',formlogin);
   }
 
   get isLoggedIn():boolean{
