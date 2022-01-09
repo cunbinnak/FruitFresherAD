@@ -1,0 +1,19 @@
+<div style="background-image: url('../../../assets/images/bglogin.jpg'); height: 100vh;" >
+    <div class="contentlog">
+            <h3 style="color: red;font-size: 18px;font-weight: 500;background-color: white;">{{msg}}</h3>
+            <form action="">
+                <p>User Name</p>
+                <input type="text" placeholder="Enter User Name" name="username" [(ngModel)]="user.username">
+                <p>Password</p>
+                <input type="password" placeholder="Enter Password" name="password" [(ngModel)]="user.password" >
+
+                <button class="submit" name="" (click)="login()" > Login</button>
+                <div class="linkauthen">
+                    <a routerLink="/forgotpassword">Forgot Password?</a>
+                    <br>
+                    <br>
+                    <a routerLink="/register">Register</a>
+                </div>
+            </form>
+    </div>
+</div>

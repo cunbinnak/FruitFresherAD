@@ -1,0 +1,247 @@
+<input type="checkbox" id="nav-toggle">
+<div class="sidebar">
+    <div class="sidebar-brand">
+        <h2><span class="lab la-accusoft"></span><span>Fruit Fresher</span> </h2>
+    </div>
+    <div class="sidebar-menu">
+        <ul>
+            <li>
+                <a routerLink="/admin/home"><span class="las la-igloo"></span>
+                <span>Dashboard</span></a>
+            </li>
+            <li>
+                <a routerLink="/admin/user"><span class="las la-users"></span>
+                <span>User</span></a>
+            </li>
+            <li>
+                <a routerLink="/admin/categories" ><span class="las la-table"></span>
+                <span>Categories</span></a>
+            </li>
+            <li>
+                <a routerLink="/admin/product" class="active"><span class="las la-table"></span>
+                <span>Products</span></a>
+            </li>
+            <li>
+                <a routerLink="/admin/order"><span class="la la-opencart"></span>
+                <span>Order</span></a>
+            </li>
+            <li>
+                <a routerLink="/home"><span class="la la-opencart"></span>
+                <span>Shopping Page</span></a>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="maincontent">
+    <header>    
+        <h2>
+            <label for="nav-toggle">
+                <span class="las la-bars"></span>
+            </label>
+            Products
+        </h2>
+        <div class="wrapuser">
+            <img src="../../../assets/images/person_1.jpg" width="30px" height="30px" alt="">
+            <div>
+                <h4>{{username}}</h4>
+                <small>{{roles}}</small>
+            </div>
+            <div class="sigout" *ngIf="username">
+                <p (click)="signout();">Sign Out</p>
+            </div>
+        </div>
+    </header>
+    <main>
+        <h2>Products</h2>
+        <br>
+
+        <div class="card-body">
+            <div class="searchcate">
+                <span class="las la-search"></span>
+                <input type="text" placeholder="search....." ngModel #key="ngModel" name="key" (ngModelChange)="searchproduct(key.value)">
+            </div>
+
+            <button class="btn btn-primary" style="margin-right:12px" data-bs-toggle="modal" data-bs-target="#addnewproduct">Add New</button>
+            <br>
+
+            <div style="margin-top:15px" >
+                <table width="100%" class="table-responsive">
+                    <thead>
+                        <tr>
+                            <th>Product ID</th>
+                            <th>Product Name</th>
+                            <th>Price</th>
+                            <th>Description</th>
+                            <th>Create Date</th>
+                            <th>Creator</th>
+                            <th>Image</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr
+                            *ngFor="let p of listProduct | paginate:{ itemsPerPage: pagesize,totalItems: count,currentPage:page}">
+                            <td>{{p.productid}}</td>
+                            <td>{{p.productname}}</td>
+                            <td>{{p.price}}</td>
+                            <td>{{p.description}}</td>
+                            <td>{{p.createDate | date}}</td>
+                            <td>{{p.creator}}</td>
+                            <td><img src="http://localhost:8080/admin/api/v1/products/{{p.urlImg}}" alt="" height="80px"></td>
+                            <td><span class="status pupple"></span>
+                                {{p.productStatus}}
+                            </td>
+                            <td style="height: 100%;">
+                                <button class="btn btn-success" style="margin-right:12px" data-bs-toggle="modal" data-bs-target="#editproduct" (click)="initeditpro(p)">Edit</button>
+                                <button class="btn btn-danger" (click)="deleteproduct(p.productid)">Delete</button>
+                            </td>
+                        </tr>
+                        <tr *ngIf="listProduct.length==0">
+                            <td colspan="9" style="text-align: center;">No Data</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div>
+                    <pagination-controls previousLabel="Prev" nextLabel="Next" [responsive]="true"
+                        (pageChange)="handlePageChange($event)"></pagination-controls>
+                </div>
+            </div>
+        
+        
+        
+            <!--Add new Cate-->
+            <hr>
+
+
+            <div class="modal fade" id="addnewproduct" tabindex="-1" aria-labelledby="addnewcate" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="addnewcate">Add New Product</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3 row">
+                            <label for="idcatename" class="col-sm-2 col-form-label">Categories Name</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" [(ngModel)]="newpro.categories">
+                                    <option *ngFor="let c of listCate" [ngValue]="c.cate_id">{{c.cate_name}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="idcatename" class="col-sm-2 col-form-label">Product Name</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control"  id="idproductname" [(ngModel)]="newpro.productname"
+                                name="productname">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="idprice" class="col-sm-2 col-form-label">Price</label>
+                            <div class="col-sm-10">
+                                <input type="number" class="form-control"  pattern="^[0-9\.]$" id="idprice" [(ngModel)]="newpro.price"
+                                name="price">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="iddescription" class="col-sm-2 col-form-label">Description</label>
+                            <div class="col-sm-10">                                
+                                <textarea class="form-control" id="iddescription" rows="3" name="description" [(ngModel)]="newpro.description"></textarea>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="idurlImg" class="col-sm-2 col-form-label">Image</label>
+                            <div class="col-sm-10">
+                                <input type="file" class="form-control" id="idurlImg" name="urlImg" [(ngModel)]="newpro.urlImg">
+                            </div>
+                        </div>
+                        
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="idproductStatus" [(ngModel)]="newpro.productStatus"  name="productStatus" >
+                            <label class="form-check-label" for="idproductStatus">
+                              Product Status
+                            </label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      <button type="button" class="btn btn-primary" (click)="addnewPro();">Save</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+           
+            
+        
+        
+            <!--Edit Cate-->
+
+
+            <div class="modal fade" id="editproduct" tabindex="-1" aria-labelledby="editproduct" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="editproduct">Edit Product</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        
+                        <div class="mb-3 row">
+                            <label for="idcatename" class="col-sm-2 col-form-label">Product ID</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control"  id="idproductid" [(ngModel)]="editpro.productid"
+                                name="productid" readonly>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="idcatename" class="col-sm-2 col-form-label">Product Name</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control"  id="idproductname" [(ngModel)]="editpro.productname"
+                                name="productname">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="idprice" class="col-sm-2 col-form-label">Price</label>
+                            <div class="col-sm-10">
+                                <input type="number" class="form-control"  pattern="^[0-9\.]$" id="idprice" [(ngModel)]="editpro.price"
+                                name="price">
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="iddescription" class="col-sm-2 col-form-label">Description</label>
+                            <div class="col-sm-10">                                
+                                <textarea class="form-control" id="iddescription" rows="3" name="description" [(ngModel)]="editpro.description"></textarea>
+                            </div>
+                        </div>
+                        <div class="mb-3 row">
+                            <label for="idurlImg" class="col-sm-2 col-form-label">Image</label>
+                            <div class="col-sm-10">
+                                <input type="file" id="idimage"
+                                    [(ngModel)]="editUrlImg" name="urlImg" (change)="selectFile($event);">
+                            </div>
+                            <div class="col-sm-10">
+                                <img src="http://localhost:8080/admin/api/v1/products/{{editpro.urlImg}}"
+                                    alt="" style="height: 200px;">
+                            </div>
+                        </div>
+                        
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="idproductStatus" [(ngModel)]="editpro.productStatus"  name="productStatus" >
+                            <label class="form-check-label" for="idproductStatus">
+                              Product Status
+                            </label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      <button type="button" class="btn btn-primary" (click)="editPro();">Update</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+        </div>
+        
+    </main>
+</div>

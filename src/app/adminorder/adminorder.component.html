@@ -1,0 +1,141 @@
+<input type="checkbox" id="nav-toggle">
+<div class="sidebar">
+    <div class="sidebar-brand">
+        <h2><span class="lab la-accusoft"></span><span>Fruit Fresher</span> </h2>
+    </div>
+    <div class="sidebar-menu">
+        <ul>
+            <li>
+                <a routerLink="/admin/home"><span class="las la-igloo"></span>
+                <span>Dashboard</span></a>
+            </li>
+            <li>
+                <a routerLink="/admin/user"><span class="las la-users"></span>
+                <span>User</span></a>
+            </li>
+            <li>
+                <a routerLink="/admin/categories" ><span class="las la-table"></span>
+                <span>Categories</span></a>
+            </li>
+            <li>
+                <a routerLink="/admin/product"><span class="las la-table"></span>
+                <span>Products</span></a>
+            </li>
+            <li>
+                <a routerLink="/admin/order" class="active"><span class="la la-opencart"></span>
+                <span>Order</span></a>
+            </li>
+            <li>
+                <a routerLink="/home"><span class="la la-opencart"></span>
+                <span>Shopping Page</span></a>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="maincontent">
+    <header>    
+        <h2>
+            <label for="nav-toggle">
+                <span class="las la-bars"></span>
+            </label>
+            Order
+        </h2>
+        <div class="wrapuser">
+            <img src="../../../assets/images/person_1.jpg" width="30px" height="30px" alt="">
+            <div>
+                <h4>{{username}}</h4>
+                <small>{{roles}}</small>
+            </div>
+            <div class="sigout" *ngIf="username">
+                <p (click)="signout();">Sign Out</p>
+            </div>
+        </div>
+    </header>
+    <main>
+        <h2>Order</h2>
+        <br>
+        <div class="card-body">
+            <div class="searchorder">
+                <span class="las la-search"></span>
+                <input type="text" placeholder="search....." ngModel #key="ngModel" (ngModelChange)="searchOrder(key.value)">
+                
+            </div>
+            <div class="table-responsive" style="text-align: center;">
+                <table width="100%">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Address</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th>Order Date</th>
+                            <th>Ship Date</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let o of listOrder">
+                            <td>{{o.orderid}}</td>
+                            <td>{{o.firstname}}</td>
+                            <td>{{o.lastname}}</td>
+                            <td>{{o.address}}</td>
+                            <td>{{o.phone}}</td>
+                            <td>{{o.email}}</td>
+                            <td>{{o.orderdate | date}}</td>
+                            <td>{{o.shipdate | date}}</td>
+                            <td><span class="status pupple"></span>
+                                {{o.orderStatus}}
+                            </td>
+                            <td>
+                                <button class="btn btn-success" style="margin-right:12px" (click)="initeditOrder(o);">Edit</button>
+                                <button class="btn btn-danger" (click)="deleteorder(o.orderid);" >Delete</button>
+                            </td>
+                        </tr>
+                        <tr *ngIf="listOrder.length==0" >
+                            <td colspan="6" style="text-align: center;">No Data</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+           
+           
+            <!--Add new Cate-->
+            <h3 style="color: black; margin: 10px 0;font-size: 1.5rem;">Update Order</h3>
+            <div class="table-responsive">
+                <table class="table no-wrap">
+                    <tbody>
+                        <tr>
+                            <td><label for="idstatus">Order Status</label></td>
+                            <td><input class="form-control" type="text" id="idstatus" [(ngModel)]="editOrder.orderStatus"
+                                    name="orderStatus"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="idstatus">Update Order Status</label></td>
+                            <td>
+                                <select name="newStatus" id="" [(ngModel)]="newStatus"  class="form-control">
+                                    
+                                    <option *ngFor="let op of listStatus" [ngValue]="op.option">{{op.option}}</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div style="margin: 10px 0; text-align: center;">
+                    <button style="margin: 15px 0;" class="btn btn-primary" (click)="edit();"> Save Change</button>
+                </div>
+            </div>
+            <!--Edit Cate-->
+           
+              
+            
+        
+        </div>
+        
+    </main>
+</div>
+
+
