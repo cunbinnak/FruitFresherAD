@@ -14,7 +14,7 @@ const routes: Routes = [
   {path:'admin/product', component:AdminproductComponent},
   {path:'admin/order', component:AdminorderComponent},
   {path:'admin/user', component:AdminuserComponent},
-  { path: '',   redirectTo: 'admin/home', pathMatch: 'full' },
+  { path: '',   redirectTo: 'admin/login', pathMatch: 'full' },
 ];
 
 @NgModule({
